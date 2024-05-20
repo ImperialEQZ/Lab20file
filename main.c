@@ -232,11 +232,99 @@ void test_task_4_all() {
     test_task_4_2();
 }
 
+void find_calculated_matrix(matrix m, matrix *calculated_matrix, int rows, int cols) {
+    for (size_t index_row = 0; index_row < rows; index_row++) {
+        for (size_t index_col = 0; index_col < cols; index_col++) {
+            if (m.values[index_row][index_col] == 1) {
+                if (index_row != 0) {
+                    calculated_matrix->values[index_row][index_col] =
+                            calculated_matrix->values[index_row - 1][index_col] + 1;
+                } else {
+                    calculated_matrix->values[index_row][index_col] = 1;
+                }
+            } else {
+                calculated_matrix->values[index_row][index_col] = 0;
+            }
+        }
+    }
+}
+
+void task_5(matrix m, int rows, int cols, size_t *result) {
+    matrix calculated_matrix = getMemMatrix(rows, cols);
+    find_calculated_matrix(m, &calculated_matrix, rows, cols);
+    size_t calculated_res = 0;
+    for (size_t index_col = 0; index_col < cols; index_col++) {
+        for (size_t index_row = 0; index_row < rows; index_row++) {
+            for (size_t index_k = index_col + 1; index_k < cols + 1; index_k++) {
+                int min = calculated_matrix.values[index_row][index_col];
+                for (size_t index_Col_k = index_col; index_Col_k < index_k;
+                     index_Col_k++) {
+                    if (calculated_matrix.values[index_row][index_Col_k] < min)
+                    min = calculated_matrix.values[index_row][index_Col_k];
+                }
+                calculated_res += min;
+            }
+        }
+    }
+    *result = calculated_res;
+}
+//Пример из пособия
+void test_task_5_1() {
+    int rows_1 = 3;
+    int cols_1 = 3;
+    matrix m_1 = createMatrixFromArray((int[]) {
+        1, 0, 1,
+        1, 1, 0,
+        1, 1, 0},
+                                      3, 3);
+    size_t answer_1 = 0;
+
+    task_5(m_1, rows_1, cols_1, &answer_1);
+
+    assert(answer_1 == 13);
+
+}
+//Мой пример
+void test_task_5_2() {
+    int rows_2 = 3;
+    int cols_2 = 3;
+    matrix m_2 = createMatrixFromArray((int[]) {
+        1, 1, 0,
+        1, 1, 1,
+        0, 0, 0},
+                                      3, 3);
+    size_t answer_2 = 0;
+
+    task_5(m_2, rows_2, cols_2, &answer_2);
+
+    assert(answer_2 == 12);
+}
+//Пример без единиц
+void test_task_5_3() {
+    int rows_3 = 2;
+    int cols_3 = 3;
+    matrix m_3 = createMatrixFromArray((int[]) {
+        0, 0, 0,
+        0, 0, 0},
+                                      2, 3);
+    size_t answer_3 = 0;
+
+    task_5(m_3, rows_3, cols_3, &answer_3);
+
+    assert(answer_3 == 0);
+}
+
+void test_task_5_all() {
+    test_task_5_1();
+    test_task_5_2();
+    test_task_5_3();
+}
 void test_lab_20(){
     //test_task_1();
     //test_task_2();
     //test_task_3();
-    test_task_4_all();
+    //test_task_4_all();
+    test_task_5_all();
 }
 
 int main() {
