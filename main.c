@@ -368,16 +368,73 @@ void test_task_6_all() {
     test_task_6_1();
     test_task_6_2();
 }
+
+typedef struct tree_node {
+    int value;
+    struct tree_node* left;
+    struct tree_node* right;
+} tree_node;
+
+tree_node* helper_task_7(int *numbers, int left, int right) {
+    if (left > right) {
+        return NULL;
+    }
+    int max_index = left;
+    for (int i = left; i <= right; i++) {
+        if (numbers[i] > numbers[max_index]) max_index = i;
+    }
+
+    tree_node* root = (tree_node*)malloc(sizeof(tree_node));
+    root->value = numbers[max_index];
+    root->left = helper_task_7(numbers, left, max_index - 1);
+    root->right = helper_task_7(numbers, max_index + 1, right);
+    return root;
+}
+
+tree_node* task_7(int* numbers, int numbers_size) {
+    return helper_task_7(numbers, 0, numbers_size - 1);
+}
+
+void print_tree_task_7(tree_node* root) {
+    if (root != NULL) {
+        printf("%d ", root->value);
+        print_tree_task_7(root->left);
+        print_tree_task_7(root->right);
+    } else {
+        printf("null ");
+    }
+}
+//Пример из пособия №1
+void test_task_7_1() {
+    int arr[3] = {3, 2, 1};
+    int len = 3;
+    tree_node* res = task_7(arr, len);
+    print_tree_task_7(res);
+}
+//Пример из пособия №2
+void test_task_7_2() {
+    int arr[6] = {3, 2, 1, 6, 0, 5};
+    int len = 6;
+    tree_node* res = task_7(arr, len);
+    print_tree_task_7(res);
+}
+
+void test_task_7_all(){
+    test_task_7_1();
+    test_task_7_2();
+}
 void test_lab_20(){
     //test_task_1();
     //test_task_2();
     //test_task_3();
     //test_task_4_all();
     //test_task_5_all();
-    test_task_6_all();
+    //test_task_6_all();
+    test_task_7_all();
 }
 
 int main() {
     test_lab_20();
+    return 0;
 }
 
