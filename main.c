@@ -1,6 +1,7 @@
 #include "matrix.h"
 #include "matrix.c"
 #include <string.h>
+#include "vector.h"
 
 void task_1(matrix *m, size_t count_query, size_t *array_query[]) {
     size_t row_1, col_1, row_2, col_2;
@@ -473,6 +474,66 @@ void test_task_8_all() {
     test_task_8_2();
     test_task_8_3_void();
 }
+
+FILE *open_file(char *file_name, char *action_on_file) {
+    FILE *file = fopen(file_name, action_on_file);
+    if (file == NULL) {
+        printf("File opening error\n");
+        exit(1);
+    }
+    return file;
+}
+
+void writing_to_file(int *nums_arr, size_t length, char *file_name) {
+    FILE *file = open_file(file_name, "w");
+    for (size_t index = 0; index < length; index++) {
+        fprintf(file, "%d ", nums_arr[index]);
+    }
+    fclose(file);
+}
+void filter_reading_and_writing_file(vector *vec, char *r_file_name, int N, char *w_file_name) {
+    FILE *r_file = open_file(r_file_name, "r");
+    FILE *w_file = open_file(w_file_name, "w");
+    int number;
+    while (fscanf(r_file, "%d", &number) == 1) {
+        if (number < N) {
+            pushBackVector(vec, number);
+            fprintf(w_file, "%d ", number);
+        }
+    }
+    fclose(r_file);
+    fclose(w_file);
+}
+
+void task_9(int *nums_arr, size_t length_arr, int controlNum_N, char
+*first_file_name, char *second_file_name, vector *vec) {
+
+    writing_to_file(nums_arr, length_arr, first_file_name);
+
+    filter_reading_and_writing_file(vec, first_file_name,
+                                    controlNum_N,second_file_name);
+    shrinkToFit(vec);
+}
+
+void test_task_9() {
+    int supplied_arr[9] = {3, 6, 17, 20, 8, 11, 32, 9, 10} ;
+    size_t length_arr = 9;
+    int N = 10;//10 не меньше 10
+    char *first_file = "20_task_9_first_file";
+    char *second_file = "20_task_9_second_file";
+    vector v = createVector(10);
+    task_9(supplied_arr, length_arr, N,
+           first_file, second_file, &v);
+
+    int answer_arr[4] = {3, 6, 8, 9};
+    size_t answer_length = 4;
+    assert(answer_length == v.size);
+    //Проверю не только значения, но и позиции
+    for (size_t index = 0; index < answer_length; index++) {
+        assert(v.data[index] == answer_arr[index]);
+    }
+}
+
 void test_lab_20(){
     //test_task_1();
     //test_task_2();
@@ -482,7 +543,8 @@ void test_lab_20(){
     //test_task_6_all();
     //test_task_7_all();
     //test_task_8_all();
-    test_task_8_all();
+    //test_task_8_all();
+    test_task_9();
 }
 
 int main() {
