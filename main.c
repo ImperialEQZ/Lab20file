@@ -105,8 +105,56 @@ void test_task_2() {
     assert(areTwoMatricesEqual(&transformed_m, &result));
 }
 
-int main() {
+int sorting_numbers_comp(const void *first_number, const void *second_number) {
+    return (*(int *) first_number - *(int *) second_number);
+}
+void fillingNumFrameSorted(int *arr, matrix m, int index_row, int index_col) {
+    int index_arr = 0;
+    for (size_t m_index_row = index_row - 1; m_index_row < index_row + 2; m_index_row++) {
+        for (size_t m_index_col = index_col - 1; m_index_col < index_col + 2; m_index_col++) {
+            if (m_index_row != index_col || m_index_col != index_col)
+                arr[index_arr++] = m.values[m_index_row][m_index_col];
+        }
+    }
+
+    qsort(arr, 8, sizeof(int), sorting_numbers_comp);
+}
+
+void task_3(matrix *m, int filter_size) {
+    int frame[8];
+    for (int index_row = 1; index_row < filter_size - 1; index_row++) {
+        for (int index_col = 1; index_col < filter_size - 1; index_col++) {
+            fillingNumFrameSorted(frame, *m, index_row, index_col);
+            int median_m = (frame[3] + frame[4]) / 2;
+            m->values[index_row][index_col] = median_m;
+        }
+    }
+}
+//Пример из пособия
+void test_task_3() {
+    int filter = 3;
+    matrix original_matrix = createMatrixFromArray((int[]) {
+        10, 20, 30,
+        25, 35, 45,
+        15, 25, 35},
+                                       3, 3);
+
+    task_3(&original_matrix, filter);
+
+    matrix transformed_matrix = createMatrixFromArray((int[]) {
+        10, 20, 30,
+        25, 25, 45,
+        15, 25, 35},
+                                            3, 3);
+    assert(areTwoMatricesEqual(&original_matrix, &transformed_matrix));
+}
+
+void test_lab_20(){
     //test_task_1();
-    test_task_2();
+    //test_task_2();
+    test_task_3();
+}
+int main() {
+    test_lab_20();
 }
 
