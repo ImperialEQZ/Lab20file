@@ -2,6 +2,7 @@
 #include "matrix.c"
 #include <string.h>
 #include "vector.h"
+#include <conio.h>
 
 void task_1(matrix *m, size_t count_query, size_t *array_query[]) {
     size_t row_1, col_1, row_2, col_2;
@@ -534,6 +535,52 @@ void test_task_9() {
     }
 }
 
+void opening_file_with_text(char *file_name, char *text) {
+    FILE *file = open_file(file_name, "w");
+    fprintf(file, "%s", text);
+    fclose(file);
+}
+
+void task_10(char *file_name, size_t count_output_lines, char *text) {
+    opening_file_with_text(file_name, text);
+    FILE *file = open_file(file_name, "r");
+    char line[128];
+    size_t counter = 0;
+    while (fgets(line, 128, file) != NULL) {
+        printf("%s", line);
+        counter++;
+        if (counter == count_output_lines) {
+            printf("Press Ctrl + C for showing\n");
+            while (getch() != 3);//Чтение символа с консоли
+        }
+    }
+}
+void test_task_10_1() {
+    char *file_name = "20_task_10";
+    size_t count_output_lines = 3;
+    char text[100] = "BIM\nBAM\nBUM\n???";
+    task_10(file_name, count_output_lines, text);
+}
+
+void test_task_10_2() {
+    char *file_name = "20_task_10_test_2";
+    size_t count_output_lines = 4;
+    char text[100] = "1234\n5678\n9100\n1477";
+    task_10(file_name, count_output_lines, text);
+}
+
+void test_task_10_3() {
+    char *file_name = "20_task_10_test_3_void";
+    size_t count_output_lines = 1;
+    char text[100] = "\0";
+    task_10(file_name, count_output_lines, text);
+}
+
+void test_task_10_all() {
+    test_task_10_1();
+    test_task_10_2();
+    test_task_10_3();
+}
 void test_lab_20(){
     //test_task_1();
     //test_task_2();
@@ -544,7 +591,8 @@ void test_lab_20(){
     //test_task_7_all();
     //test_task_8_all();
     //test_task_8_all();
-    test_task_9();
+    //test_task_9();
+    test_task_10_all();
 }
 
 int main() {
