@@ -319,12 +319,62 @@ void test_task_5_all() {
     test_task_5_2();
     test_task_5_3();
 }
+
+void task_6(const char *str, size_t length, char *result, size_t *res_length) {
+    char buff[10];
+    size_t buff_length = 0;
+    size_t calculated_res_length = 0;
+    char num = '1';
+    for (size_t index = 0; index < length; index++) {
+        buff[buff_length++] = num++;
+        if (str[index] == 'I')
+            while (buff_length > 0)
+                result[calculated_res_length++] = buff[--buff_length];
+    }
+    buff[buff_length++] = num;
+    while (buff_length > 0)
+        result[calculated_res_length++] = buff[--buff_length];
+    result[calculated_res_length] = '\0';
+    *res_length = calculated_res_length;
+}
+//Пример из пособия №1
+void test_task_6_1() {
+    char s[10] = "IIIDIDDD";
+    size_t length = 8;
+    char res[10];
+
+    size_t res_length;
+
+    task_6(s, length, res, &res_length);
+    char answer[10] = "123549876";
+
+    assert(strcmp(res, answer) == 0);
+}
+//Пример из пособия №2
+void test_task_6_2() {
+    char s[5] = "DDD";
+    size_t length = 3;
+    char res[5];
+
+    size_t res_length;
+
+    task_6(s, length, res, &res_length);
+    char answer[10] = "4321";
+
+    assert(strcmp(res, answer) == 0);
+}
+
+void test_task_6_all() {
+    test_task_6_1();
+    test_task_6_2();
+}
 void test_lab_20(){
     //test_task_1();
     //test_task_2();
     //test_task_3();
     //test_task_4_all();
-    test_task_5_all();
+    //test_task_5_all();
+    test_task_6_all();
 }
 
 int main() {
