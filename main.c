@@ -581,18 +581,57 @@ void test_task_10_all() {
     test_task_10_2();
     test_task_10_3();
 }
+
+void task_11(char* *dict, char* *requests, int *num_in_req, int size_N, int ammount_requests_Q) {
+//char* *dict - массив указателей на строки, где каждый указатель указывает на начало строки
+//char* *requests - аналогично с char* *dict
+    int count_str = 0;//Подсчет количества строк, в которых найдена подстрока из запроса
+    int count_substring = 0;//Количество подстрок из запроса, найденных в строке
+    for (int i = 0; i < ammount_requests_Q; i++) {
+        for (int j = 0; j < size_N; j++) {
+            if (strstr(dict[j], requests[i]) != NULL) {
+                count_str++;
+                count_substring++;
+            } else
+                count_str++;
+            if (count_substring == num_in_req[i]) {
+                printf("%d\n", count_str);
+                break;
+            }
+        }
+        if (num_in_req[i] > count_substring) {
+            printf("-1\n");
+            count_str = 0;
+            count_substring = 0;
+        } else {
+            count_str = 0;
+            count_substring = 0;
+        }
+    }
+}
+//Пример из пособия
+void test_task_11() {
+    int N = 10;
+    int Q = 3;
+    char *dict[100] = {"aa", "aaa", "aab", "ab", "abc", "ac",
+                       "ba", "daa", "dab", "dadba"};
+    char *requests[100] = {"a", "da", "da"};
+    int answer_in_requests[3] = {4, 2, 4};
+    task_11(dict, requests, answer_in_requests, N, Q);
+}
 void test_lab_20(){
-    //test_task_1();
-    //test_task_2();
-    //test_task_3();
-    //test_task_4_all();
-    //test_task_5_all();
-    //test_task_6_all();
-    //test_task_7_all();
-    //test_task_8_all();
-    //test_task_8_all();
-    //test_task_9();
+    test_task_1();
+    test_task_2();
+    test_task_3();
+    test_task_4_all();
+    test_task_5_all();
+    test_task_6_all();
+    test_task_7_all();
+    test_task_8_all();
+    test_task_8_all();
+    test_task_9();
     test_task_10_all();
+    test_task_11();
 }
 
 int main() {
