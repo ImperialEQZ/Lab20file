@@ -423,6 +423,56 @@ void test_task_7_all(){
     test_task_7_1();
     test_task_7_2();
 }
+
+void task_8(const char *s, size_t length,
+            const size_t *indexes, char *new_str) {
+    for (size_t index = 0; index < length; index++) {
+        new_str[index] = s[indexes[index]];
+    }
+    new_str[length] = '\0';
+}
+//Пример из пособия №1
+void test_task_8_1() {
+    char str[4] = "abc";//4 т.к \0 в конце
+    size_t length_str = 3;
+    size_t indices[3] = {0, 1, 2};
+    char resulting_str[4];//4 т.к \0 в конце
+
+    task_8(str, length_str, indices, resulting_str);
+
+    char answer[4] = "abc";//4 т.к \0 в конце
+    assert(strcmp(resulting_str, answer) == 0);
+}
+//Пример из пособия №2
+void test_task_8_2() {
+    char str[5] = "abap";//5 т.к \0 в конце
+    size_t length_str = 4;
+    size_t indices[4] = {0, 3, 2, 1};
+    char resulting_str[5];//5 т.к \0 в конце
+
+    task_8(str, length_str, indices, resulting_str);
+
+    char answer[5] = "apab";//5 т.к \0 в конце
+    assert(strcmp(resulting_str, answer) == 0);
+}
+//Мой пример, проверка с пустой строкой
+void test_task_8_3_void() {
+    char str[1] = "\0";
+    size_t length_str = 0;
+    size_t indices[0] = {};
+    char resulting_str[1];
+
+    task_8(str, length_str, indices, resulting_str);
+
+    char answer[1] = "";
+    assert(strcmp(resulting_str, answer) == 0);
+}
+
+void test_task_8_all() {
+    test_task_8_1();
+    test_task_8_2();
+    test_task_8_3_void();
+}
 void test_lab_20(){
     //test_task_1();
     //test_task_2();
@@ -430,7 +480,9 @@ void test_lab_20(){
     //test_task_4_all();
     //test_task_5_all();
     //test_task_6_all();
-    test_task_7_all();
+    //test_task_7_all();
+    //test_task_8_all();
+    test_task_8_all();
 }
 
 int main() {
